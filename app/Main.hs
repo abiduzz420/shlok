@@ -1,6 +1,8 @@
 module Main where
 
-import Lib
+import Shlok
 
 main :: IO ()
-main = someFunc
+main = undefined
+
+
