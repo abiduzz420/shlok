@@ -27,7 +27,7 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Shlok
   other-modules:
       Paths_shlok
   hs-source-dirs:
@@ -36,7 +36,7 @@ library
       base >=4.7 && <5
   default-language: Haskell2010
 
-executable shlok-exe
+executable shlok
   main-is: Main.hs
   other-modules:
       Paths_shlok
