@@ -1,5 +1,8 @@
 module Shlok where
 
+import Control.Monad
+import Control.Monad.Except
+
 -- representation of variables
 data Name
     = Const String
@@ -7,7 +10,7 @@ data Name
     | Unquoted Int
     deriving (Show, Eq)
 
-{-
+{- |
     Four kinds of terms
     e := e :: τ (annotated term)
         | x (variable)
@@ -29,7 +32,7 @@ data CTerm
     | Lam CTerm
     deriving (Show, Eq)
 
-{-
+{- |
     Two kinds of types
     τ := a (type identifier TPar)
       | τ -> τ'(function arrow)
@@ -42,7 +45,7 @@ data Type
     | Fun Type Type
     deriving (Show, Eq)
 
-{-
+{- |
     Terms can be evaluated to values. A value is either
         - neutral term
         - lambda abstraction
@@ -64,6 +67,7 @@ data Neutral
 
 -- | Evaluation
 
+-- Handles substitution of bound variables
 type Env = [Value]
 
 iEval :: ITerm -> Env -> Value
@@ -85,3 +89,65 @@ vpar n = VNeutral (NPar n)
 vapp :: Value -> Value -> Value
 vapp (VLam f) v = f v
 vapp (VNeutral n) v = VNeutral (NApp n v)
+
+-- | Contexts
+
+data Kind = Star
+    deriving (Show)
+
+data Info
+    = HasKind Kind
+    | HasType Type
+    deriving (Show)
+
+type Context = [(Name, Info)]
+
+-- | Type Checker
+
+-- Graceful Error Monad
+type Result = Either String
+
+-- well-formedness of types is checked
+kind :: Context -> Type -> Kind -> Result ()
+kind cxt (TPar x) Star
+    = case lookup x cxt of
+        Just (HasKind Star) -> return ()
+        Nothing             -> throwError "unknown identifier"
+kind cxt (Fun ty ty') Star
+    = do kind cxt ty Star
+         kind cxt ty' Star
+
+iType :: Int -> Context -> ITerm -> Result Type
+iType i cxt (Ann e t)
+    = do kind cxt t Star
+         cType i cxt e t
+         return t
+iType i cxt (Par x)
+    = case lookup x cxt of
+        Just (HasType t) -> return t
+        Nothing          -> throwError "unknown identifier"
+iType i cxt (e1 :@: e2)
+    = do sigma <- iType i cxt e1
+         case sigma of
+            Fun t t' ->  do cType i cxt e2 t
+                            return t'
+            _        -> throwError "illegal exception"
+
+cType :: Int -> Context -> CTerm -> Type -> Result ()
+cType i cxt (Inf e) t
+    = do t' <- iType i cxt e
+         unless (t == t') (throwError "type mismatch")
+cType i cxt (Lam e) (Fun t t')
+    = cType (i+1) ((Bound i, HasType t):cxt)
+            (cSubst 0 (Par (Bound i)) e) t'
+cType i cxt _ _
+    = throwError "type mismatch"
+
+iType0 :: Context -> ITerm -> Result Type
+iType0 = iType 0
+
+-- Substitution
+iSubst :: Int -> ITerm -> ITerm -> ITerm
+iSubst = _
+cSubst :: Int -> ITerm -> CTerm -> CTerm
+cSubst = _
