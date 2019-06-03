@@ -148,6 +148,11 @@ iType0 = iType 0
 
 -- Substitution
 iSubst :: Int -> ITerm -> ITerm -> ITerm
-iSubst = _
+iSubst i r (Ann e t) = Ann (cSubst i r e) t
+iSubst i r (Var j) = if i==j then r else Var j
+iSubst i r (Par y) = Par y
+iSubst i r (e1 :@: e2) = iSubst i r e1 :@: cSubst i r e2
+
 cSubst :: Int -> ITerm -> CTerm -> CTerm
-cSubst = _
+cSubst i r (Inf e) = Inf (iSubst i r e)
+cSubst i r (Lam e) = Lam (cSubst (i+1) r e)
