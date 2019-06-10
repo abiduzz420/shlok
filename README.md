@@ -1,4 +1,4 @@
-# shlok: Dependently Typed Functional Language
+# shlok (श्लोक): Dependently Typed Functional Language
 
 The project is in its nascent stage. I am currently learning to write, type checker for simply-typed lambda calculus (STLC) 🚧
 
