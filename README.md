@@ -15,10 +15,7 @@ Here are few things I am looking to build:
 
 ##### Simply Typed Lambda Calculus
 
-[1] Paper on "An Implementation of a Dependently Typed Lambda Calculus" by Andres Löh, Conor McBride and Wouter Swierstra
-
-[2] OPLSS 2018 lectures "Foundations of Programming Languagues" by Paul Downen and Jan Hoffman
-
-[3] Chapter 7 on Types, "Essentials of Programming Languages" 3rd edition by Daniel P. Friedman and Mitchell Wand
-
-[4] Part II on Simple Types, "Types and Programming Languages" by Benjamin C. Pierce
+- Paper on "An Implementation of a Dependently Typed Lambda Calculus" by Andres Löh, Conor McBride and Wouter Swierstra
+- OPLSS 2018 lectures "Foundations of Programming Languagues" by Paul Downen and Jan Hoffman
+- Chapter 7 on Types, "Essentials of Programming Languages" 3rd edition by Daniel P. Friedman and Mitchell Wand
+- Part II on Simple Types, "Types and Programming Languages" by Benjamin C. Pierce
