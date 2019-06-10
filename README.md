@@ -4,7 +4,7 @@ The project is in its nascent stage. I am currently writing the type checker for
 
 Here are some of things I am looking to build:
 
-### Hightlights of this project
+### Highlights of this project
 
 - Smallest imaginable statically typed functional language
 - Dependendent type sytem serves as the core of the language
