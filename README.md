@@ -7,7 +7,7 @@ Here are few things I am looking to build:
 ### Highlights of this project
 
 - Smallest imaginable statically typed functional language
-- Dependendent type sytem serves as the core of the language
+- Dependent type sytem serves as the core of the language
 - Evolved from a small STLC core to dependent-typed lambda calculus
 - Support for data types and writing simple programs in its initial version
 
