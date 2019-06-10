@@ -13,6 +13,8 @@ Here are few things I am looking to build:
 
 ### Reading material
 
+##### Simply Typed Lambda Calculus
+
 [1] Paper on "An Implementation of a Dependently Typed Lambda Calculus" by Andres Löh, Conor McBride and Wouter Swierstra
 
 [2] OPLSS 2018 lectures "Foundations of Programming Languagues" by Paul Downen and Jan Hoffman
