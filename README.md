@@ -1,8 +1,8 @@
 # shlok: Dependently Typed Functional Language
 
-The project is in its nascent stage. I am currently writing the type checker for simply-typed lambda calculus (STLC) 🚧
+The project is in its nascent stage. I am currently learning to write, type checker for simply-typed lambda calculus (STLC) 🚧
 
-Here are some of things I am looking to build:
+Here are few things I am looking to build:
 
 ### Highlights of this project
 
@@ -14,6 +14,9 @@ Here are some of things I am looking to build:
 ### Reading material
 
 [1] Paper on "An Implementation of a Dependently Typed Lambda Calculus" by Andres Löh, Conor McBride and Wouter Swierstra
+
 [2] OPLSS 2018 lectures "Foundations of Programming Languagues" by Paul Downen and Jan Hoffman
+
 [3] Chapter 7 on Types, "Essentials of Programming Languages" 3rd edition by Daniel P. Friedman and Mitchell Wand
+
 [4] Part II on Simple Types, "Types and Programming Languages" by Benjamin C. Pierce
