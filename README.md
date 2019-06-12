@@ -1,6 +1,6 @@
 # shlok (श्लोक): dependently typed functional language
 
-The project is in its nascent stage and is purely for educational purposes. I do not have a defined roadmap as such but I am looking to explore PL design space and incorporating eclectic ideas into shlok. I might end up building something entirely different, you never know. Currently, I am learning to write type checker for simply-typed lambda calculus (STLC) 🚧
+The project is in its nascent stage and is purely for educational purposes. I do not have a defined roadmap as such but I am looking to explore PL design space and incorporating eclectic ideas into shlok. I might end up building something entirely different, you never know. Currently, I am learning to write type checker for simply-typed λ-calculus (STLC) 🚧
 
 Here are a few things I am looking to build although it might seem ambitious for a curious PLT beginner (who cares?):
 
@@ -8,7 +8,7 @@ Here are a few things I am looking to build although it might seem ambitious for
 
 - Smallest imaginable statically typed functional language
 - Dependent type sytem serves as the core of the language
-- Evolved from a small STLC core to dependent-typed lambda calculus
+- Evolved from a small STLC core to dependent-typed λ-calculus
 - Support for data types and writing simple programs in its initial version
 
 ### Reading material
@@ -22,4 +22,4 @@ Here are a few things I am looking to build although it might seem ambitious for
 
 ### Road to Shlok 
 
-1. Implementing Simply typed lambda calculus 📍
+1. Implementing Simply typed λ-calculus 📍
