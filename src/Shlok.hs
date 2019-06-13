@@ -16,6 +16,8 @@ data Name
         | x (variable)
         | e1 e2 (function application)
         | λx → e (lambda abstraction)
+
+    Lambda abstractions can only be checked but not inferred
 -}
 
 -- Inferable Term
@@ -70,11 +72,32 @@ data Neutral
 -- Handles substitution of bound variables
 type Env = [Value]
 
+{- |
+    Evaluation rules in λ->
+        - Type annotations are ignored
+        - Variable evaluates to themselves
+        - λx -> e evaluates to λx -> v where e evaluates to v
+        - In the case of application,
+            if e1 is a lambda 
+                then beta-reduce (λx. e1) e2 ⇒ e1[e2/x]
+                But in the given implementation we use Haskell's own function application
+                to represent function values
+            else (neutral term)
+                then add e2 to the context
+-}
+
+-- Evaluators for well-typed expressions
 iEval :: ITerm -> Env -> Value
 iEval (Ann e _) d = cEval e d
 iEval (Var i) d = d !! i
 iEval (Par x) d = vpar x
 iEval (e1 :@: e2) d = vapp (iEval e1 d) (cEval e2 d)
+
+{-
+    Since e1, e2 (in e1 :@: e2) are evaluated
+    before the substitution (see iEval), does this mean it
+    comes under call-by-value case (Refere beta-law for CBV) ?
+-}
 
 cEval :: CTerm -> Env -> Value
 cEval (Inf i) d = iEval i d
@@ -86,6 +109,8 @@ cEval (Lam e) d = VLam (\x -> cEval e (x:d))
 vpar :: Name -> Value
 vpar n = VNeutral (NPar n)
 
+-- not using beta-reduction to implement function application
+-- Instead using Haskell's own function application
 vapp :: Value -> Value -> Value
 vapp (VLam f) v = f v
 vapp (VNeutral n) v = VNeutral (NApp n v)
@@ -102,7 +127,7 @@ data Info
 
 type Context = [(Name, Info)]
 
--- | Type Checker
+-- | Type Checker for λ-> terms
 
 -- Graceful Error Monad
 type Result = Either String
