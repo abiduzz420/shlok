@@ -3,21 +3,31 @@ module Shlok where
 import Control.Monad
 import Control.Monad.Except
 
--- representation of variables
+-- representation of free variables
 data Name
     = Const String
     | Bound Int
     | Unquoted Int
     deriving (Show, Eq)
 
-{- |
+{-
     Four kinds of terms
     e := e :: τ (annotated term)
         | x (variable)
         | e1 e2 (function application)
         | λx → e (lambda abstraction)
 
-    Lambda abstractions can only be checked but not inferred
+    From the type rules, we can infer the types of
+    annotated terms, variables and application constructs.
+    Lambda abstractions can only be checked but not inferred.
+    Hence we make syntactic distiction between inferrable terms
+    and checkable terms
+
+    For bound variables we are using de Bruijn indicies to save
+    the work of implementing alpha-conversion and alpha-equivalence,
+    which is renaming of variables, preventing name-capture etc
+    
+    https://en.wikipedia.org/wiki/De_Bruijn_index
 -}
 
 -- Inferable Term
@@ -28,13 +38,17 @@ data ITerm
     | ITerm :@: CTerm -- :@: denotes application
     deriving (Show, Eq)
 
+{-
+    Lambda abstractions do not introduce explicit
+    variables due to use of de Bruijn indicies.
+-}
 -- Checkable Term
 data CTerm
     = Inf ITerm
     | Lam CTerm
     deriving (Show, Eq)
 
-{- |
+{-
     Two kinds of types
     τ := a (type identifier TPar)
       | τ -> τ'(function arrow)
@@ -47,13 +61,13 @@ data Type
     | Fun Type Type
     deriving (Show, Eq)
 
-{- |
+{-
     Terms can be evaluated to values. A value is either
         - neutral term
         - lambda abstraction
 
     A neutral term is a variable applied to sequence of values (possibly empty).
-    Hence a variable or an application.
+    Hence a free variable or an application.
 
     The term const (:: λx → λy → x) – if evaluated – results in the 
     value VLam (λx → VLam (λy → x))
@@ -72,7 +86,7 @@ data Neutral
 -- Handles substitution of bound variables
 type Env = [Value]
 
-{- |
+{-
     Evaluation rules in λ->
         - Type annotations are ignored
         - Variable evaluates to themselves
@@ -82,8 +96,8 @@ type Env = [Value]
                 then beta-reduce (λx. e1) e2 ⇒ e1[e2/x]
                 But in the given implementation we use Haskell's own function application
                 to represent function values
-            else (neutral term)
-                then add e2 to the context
+            else (e1 is neutral term)
+                then create a netural value (NApp) of it
 -}
 
 -- Evaluators for well-typed expressions
@@ -109,8 +123,11 @@ cEval (Lam e) d = VLam (\x -> cEval e (x:d))
 vpar :: Name -> Value
 vpar n = VNeutral (NPar n)
 
--- not using beta-reduction to implement function application
--- Instead using Haskell's own function application
+{-
+    not using beta-reduction to implement function application
+    Instead using Haskell's own function application
+-}
+
 vapp :: Value -> Value -> Value
 vapp (VLam f) v = f v
 vapp (VNeutral n) v = VNeutral (NApp n v)
