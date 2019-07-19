@@ -3,13 +3,6 @@ module Shlok where
 import Control.Monad
 import Control.Monad.Except
 
--- representation of free variables
-data Name
-    = Const String
-    | Bound Int
-    | Unquoted Int
-    deriving (Show, Eq)
-
 {-
     Four kinds of terms
     e := e :: τ (annotated term)
@@ -22,6 +15,10 @@ data Name
     Lambda abstractions can only be checked but not inferred.
     Hence we make syntactic distiction between inferrable terms
     and checkable terms
+    
+    Alternatively, we could require every lambda-abstracted 
+    variable to be explicitly annotated in the
+    abstract syntax – we would then have inferable terms exclusively.
     
     Every term is checkable and so the inferred terms are wrapped
     inside of chekable implementations. For example, look at cEval
@@ -86,6 +83,13 @@ data Neutral
     = NPar Name
     | NApp Neutral Value
 
+-- representation of free variables
+data Name
+    = Const String
+    | Bound Int
+    | Unquoted Int
+    deriving (Show, Eq)
+    
 -- | Evaluation
 
 -- Handles substitution of bound variables
@@ -133,6 +137,7 @@ vpar n = VNeutral (NPar n)
     Instead using Haskell's own function application
 -}
 
+-- handles evaluation of application construct and spits out Value
 vapp :: Value -> Value -> Value
 vapp (VLam f) v = f v
 vapp (VNeutral n) v = VNeutral (NApp n v)
@@ -147,6 +152,7 @@ data Info
     | HasType Type
     deriving (Show)
 
+-- lists valid base types, and associates identifiers with type information
 type Context = [(Name, Info)]
 
 -- | Type Checker for λ-> terms
@@ -154,7 +160,8 @@ type Context = [(Name, Info)]
 -- Graceful Error Monad
 type Result = Either String
 
--- well-formedness of types is checked
+-- well-formedness of types is checked.
+-- TODO: Add why it is required ?
 kind :: Context -> Type -> Kind -> Result ()
 kind cxt (TPar x) Star
     = case lookup x cxt of
