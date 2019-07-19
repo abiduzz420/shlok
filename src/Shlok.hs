@@ -22,6 +22,11 @@ data Name
     Lambda abstractions can only be checked but not inferred.
     Hence we make syntactic distiction between inferrable terms
     and checkable terms
+    
+    Every term is checkable and so the inferred terms are wrapped
+    inside of chekable implementations. For example, look at cEval
+    implementation. When it sees an inferable term, it internally
+    calls iEval.
 
     For bound variables we are using de Bruijn indicies to save
     the work of implementing alpha-conversion and alpha-equivalence,
